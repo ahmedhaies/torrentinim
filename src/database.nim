@@ -24,6 +24,7 @@ proc init_database*(): string =
 
 proc insert_torrent*(torrent: Torrent): bool =
   echo &"[database] Saving torrent: {torrent.canonical_url}"
+  echo torrent
 
   let db = open("torrentinim-data.db", "", "", "")
   result = db.tryInsertID(sql"INSERT INTO torrents (uploaded_at, name, canonical_url, magnet_url, size, seeders, leechers) VALUES (?, ?, ?, ?, ?, ?, ?)",

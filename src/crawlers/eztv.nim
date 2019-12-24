@@ -4,7 +4,6 @@ import xmlparser
 import xmltree
 import os
 import strutils
-
 import ../torrent
 import ../database
 
@@ -21,14 +20,12 @@ proc latest*() =
     for item_node in xmlRoot.findAll("item"):
         var torrent: Torrent = newTorrent()
         torrent.name = item_node.child("title").innerText
-        # echo "A:"
-        # echo item_node.child("torrent:magnetURI").text
-
         torrent.canonical_url = item_node.child("link").innerText
-        torrent.magnet_url = item_node.child("torrent:magnetURI").innerText
         torrent.size = item_node.child("torrent:contentLength").innerText
         torrent.seeders = parseInt(item_node.child("torrent:seeds").innerText)
         torrent.leechers = parseInt(item_node.child("torrent:peers").innerText)
+        for ic in item_node.child("torrent:magnetURI").items:
+            torrent.magnet_url = ic.text
 
         discard insert_torrent(torrent)
 

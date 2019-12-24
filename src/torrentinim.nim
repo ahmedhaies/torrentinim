@@ -9,10 +9,10 @@ import json
 import database
 import /crawlers/eztv
 
-# discard init_database()
-# spawn start_crawl()
+discard init_database()
+spawn start_crawl()
 
 when isMainModule:
   routes:
     get "/":
-      resp $(%*(all_torrents()))
+      resp "as" #$(%*(all_torrents()))
