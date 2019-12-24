@@ -1,6 +1,7 @@
 import db_sqlite
 import torrent
 import strformat
+import strutils
 import times
 
 proc init_database*(): string =
@@ -23,7 +24,7 @@ proc init_database*(): string =
 
 
 proc insert_torrent*(torrent: Torrent): bool =
-  echo &"[database] Saving torrent: {torrent.canonical_url}"
+  echo &"[database] Saving torrent: {torrent}"
 
   let db = open("torrentinim-data.db", "", "", "")
   result = db.tryInsertID(sql"INSERT INTO torrents (uploaded_at, name, canonical_url, magnet_url, size, seeders, leechers) VALUES (?, ?, ?, ?, ?, ?, ?)",
@@ -39,7 +40,17 @@ proc insert_torrent*(torrent: Torrent): bool =
 
 proc all_torrents*(): seq[Torrent] =
   let db = open("torrentinim-data.db", "", "", "")
-  let torrents = db.getAllRows(sql"SELECT name, canonical_url, uploaded_at FROM torrents")
+  let torrents = db.getAllRows(sql"SELECT uploaded_at, name, canonical_url, magnet_url, size, seeders, leechers FROM torrents")
   for row in torrents:
-    result.add(Torrent(name: row[0], canonical_url: row[1], uploaded_at: parse(row[2], "yyyy-MM-dd'T'HH:mm:sszzz"))) #2019-12-23T23:15:41-05:00
+    result.add(
+      Torrent(
+        uploaded_at: parse(row[0], "yyyy-MM-dd'T'HH:mm:sszzz"),
+        name: row[1],
+        canonical_url: row[2],
+        magnet_url: row[3],
+        size: row[4],
+        seeders: parseInt(row[5]),
+        leechers: parseInt(row[6])
+      )
+    ) #2019-12-23T23:15:41-05:00
   db.close()
