@@ -2,6 +2,9 @@
 
 Torrentinim is a self-hosted API-only, low memory footprint, torrent search engine.
 
+_This is a work in progress as I learn Nim, and build out more features. Once I complete
+the initial set of working features, I'll remove this notice and add screenshots._
+
 # TODO: Take screenshots of some results.
 
 ### Goals
