@@ -3,9 +3,16 @@
 import htmlgen
 import jester
 import json
+import threadpool
+import json
+
+import database
 import /crawlers/eztv
+
+# discard init_database()
+# spawn start_crawl()
 
 when isMainModule:
   routes:
     get "/":
-      resp %latest()
+      resp $(%*(all_torrents()))

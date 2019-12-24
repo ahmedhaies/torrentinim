@@ -10,14 +10,7 @@ import strtabs # To access XmlAttributes
 import strutils # To use cmpIgnoreCase
 import nimquery
 
-type
-    Torrent* = object
-        name*: string
-        canonical_url*: string
-        magnet_url*: string
-        size*: string
-        seeders*: int
-        leechers*: int
+import ../torrent
 
 proc pageUrls(): seq[string] =
     var categories = @[
@@ -54,7 +47,7 @@ proc extractTorrentLinks(html: string): seq[string] =
     )
 
 proc extractTorrentInformation(link: string): Torrent =
-    var torrent: Torrent = Torrent()
+    var torrent: Torrent = newTorrent()
 
     let torrentHtml = downloadUrl(link)
     let html = parseHtml(torrentHtml)
