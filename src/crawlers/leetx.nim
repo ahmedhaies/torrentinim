@@ -11,6 +11,7 @@ import strutils # To use cmpIgnoreCase
 import nimquery
 
 import ../torrent
+import ../database
 
 proc pageUrls(): seq[string] =
     var categories = @[
@@ -89,10 +90,17 @@ proc extractTorrentInformation(link: string): Torrent =
 
     return torrent
 
-proc latest*(): seq[Torrent] =
+proc latest*() =
+    echo "[1337x] Starting 1337x crawl"
     var pages = pageUrls()
     for url in pages:
         var categoryPageHtml = downloadUrl(url)
         var torrentLinks = extractTorrentLinks(categoryPageHtml)
         for link in torrentLinks:
-            result.add(extractTorrentInformation(link))
+            discard insert_torrent(extractTorrentInformation(link))
+
+    sleep(10000)
+    latest()
+
+proc start_crawl*() =
+    latest()

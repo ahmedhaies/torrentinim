@@ -7,10 +7,12 @@ import threadpool
 import json
 
 import database
-import /crawlers/eztv
+from /crawlers/eztv import nil
+from /crawlers/leetx import nil
 
 discard init_database()
-spawn start_crawl()
+spawn eztv.start_crawl()
+spawn leetx.start_crawl()
 
 when isMainModule:
   routes:
