@@ -16,7 +16,7 @@ the initial set of working features, I'll remove this notice and add screenshots
 - Easy to understand source code. Special care is taken to keep code lean and understandable. No code golf here.
 - High performance, extremely low memory footprint.
 
-On average the application uses about 6MB of RAM:
+On average the application (1MB size) uses about 6MB of RAM:
 
 # TODO: Take screenshot of the application's memory usage after 24 hours being up and running.
 
