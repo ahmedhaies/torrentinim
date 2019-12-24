@@ -7,6 +7,7 @@ import threadpool
 import json
 
 import database
+import /helpers/datetime
 from /crawlers/eztv import nil
 from /crawlers/leetx import nil
 
@@ -17,4 +18,4 @@ spawn leetx.start_crawl()
 when isMainModule:
   routes:
     get "/":
-      resp "as" #$(%*(all_torrents()))
+      resp %all_torrents()
