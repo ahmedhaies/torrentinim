@@ -61,9 +61,9 @@ proc all_torrents*(): seq[Torrent] =
 proc search*(query: string, page: int): seq[Torrent] =
   echo query
   let perPage = 5
-  let skip = page * perPage
+  let skip = if page == 1: 0 else: page * perPage
   let db = open("torrentinim-data.db", "", "", "")
-  let torrents = db.getAllRows(sql"SELECT name, canonical_url, uploaded_at FROM torrents WHERE name LIKE '%?%'", query)
+  let torrents = db.getAllRows(sql"SELECT name, canonical_url, uploaded_at FROM torrents WHERE name LIKE '%' || ? || '%' LIMIT ?, ?", query, skip, perPage)
 
   for row in torrents:
     result.add(

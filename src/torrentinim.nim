@@ -12,9 +12,11 @@ import /helpers/datetime
 from /crawlers/eztv import nil
 from /crawlers/leetx import nil
 
-discard init_database()
-spawn eztv.start_crawl()
-spawn leetx.start_crawl()
+# discard init_database()
+# spawn eztv.start_crawl()
+# spawn leetx.start_crawl()
+
+# TODO: Make sure all torrents datetimes are saved in uniform pattern.
 
 when isMainModule:
   routes:
