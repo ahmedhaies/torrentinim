@@ -3,11 +3,13 @@ import torrent
 import strformat
 import strutils
 import times
+import json
 
 proc init_database*(): string =
   let db = open("torrentinim-data.db", "", "", "")
 
   db.exec(sql"DROP TABLE IF EXISTS torrents")
+  db.exec(sql"PRAGMA case_sensitive_like = true;")
   echo "[database] Initializing database if necessary."
   db.exec(sql"""CREATE TABLE IF NOT EXISTS torrents (
                   id            INTEGER PRIMARY KEY,
@@ -20,6 +22,7 @@ proc init_database*(): string =
                   leechers      INTEGER
                 )""")
   db.exec(sql"""CREATE UNIQUE INDEX torrents_unique_canonical_url ON torrents(canonical_url)""")
+  db.exec(sql"""CREATE INDEX torrents_name ON torrents(name)""")
   db.close()
 
 
@@ -53,4 +56,25 @@ proc all_torrents*(): seq[Torrent] =
         leechers: parseInt(row[6])
       )
     ) #2019-12-23T23:15:41-05:00
+  db.close()
+
+proc search*(query: string, page: int): seq[Torrent] =
+  echo query
+  let perPage = 5
+  let skip = page * perPage
+  let db = open("torrentinim-data.db", "", "", "")
+  let torrents = db.getAllRows(sql"SELECT name, canonical_url, uploaded_at FROM torrents WHERE name LIKE '%?%'", query)
+
+  for row in torrents:
+    result.add(
+      Torrent(
+        uploaded_at: parse(row[0], "yyyy-MM-dd'T'HH:mm:sszzz"),
+        name: row[1],
+        canonical_url: row[2],
+        magnet_url: row[3],
+        size: row[4],
+        seeders: parseInt(row[5]),
+        leechers: parseInt(row[6])
+      )
+    )
   db.close()
