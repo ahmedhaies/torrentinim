@@ -13,8 +13,8 @@ from /crawlers/eztv import nil
 from /crawlers/leetx import nil
 
 # discard init_database()
-# spawn eztv.start_crawl()
-# spawn leetx.start_crawl()
+spawn eztv.start_crawl()
+spawn leetx.start_crawl()
 
 # TODO: Make sure all torrents datetimes are saved in uniform pattern.
 
@@ -28,4 +28,4 @@ when isMainModule:
       else:
         resp(Http200, "Params: `q` and `page` must be present")
     get "/latest":
-      resp(Http200, $(%all_torrents()) , contentType="application/json")
+      resp(Http200, $(%latest(50)) , contentType="application/json")

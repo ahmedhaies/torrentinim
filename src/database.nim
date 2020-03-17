@@ -41,9 +41,9 @@ proc insert_torrent*(torrent: Torrent): bool =
   ) != -1
   db.close()
 
-proc all_torrents*(): seq[Torrent] =
+proc latest*(limit: int): seq[Torrent] =
   let db = open("torrentinim-data.db", "", "", "")
-  let torrents = db.getAllRows(sql"SELECT name, uploaded_at, canonical_url, magnet_url, size, seeders, leechers FROM torrents")
+  let torrents = db.getAllRows(sql"SELECT name, uploaded_at, canonical_url, magnet_url, size, seeders, leechers FROM torrents LIMIT ?", limit)
   for row in torrents:
     result.add(
       Torrent(
@@ -55,7 +55,7 @@ proc all_torrents*(): seq[Torrent] =
         seeders: parseInt(row[5]),
         leechers: parseInt(row[6]),
       )
-    ) #2019-12-23T23:15:41-05:00
+    )
   db.close()
 
 proc search*(query: string, page: int): seq[Torrent] =
